@@ -119,8 +119,8 @@ db_exists() {
 seed_demo_data() {
   echo "Seeding demo data..."
   run_in_project_root 'mix run --no-start -e "
-Lightning.Setup.ensure_minimum_setup()
-Ecto.Migrator.with_repo(Lightning.Repo, fn _repo ->
+{:ok, _} = Application.ensure_all_started(:tzdata)
+Lightning.Setup.with_minimum_setup(fn ->
   Lightning.SetupUtils.setup_demo(create_super: true)
 end)
 "'

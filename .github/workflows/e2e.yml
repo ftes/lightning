@@ -1,0 +1,60 @@
+name: E2E (Playwright)
+on:
+  pull_request:
+jobs:
+  e2e:
+    name: browser suite
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    services:
+      postgres:
+        image: postgres:16
+        env: { POSTGRES_USER: postgres, POSTGRES_PASSWORD: postgres }
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U postgres" --health-interval 5s
+          --health-retries 20
+    env:
+      CI: true
+      PGPASSWORD: postgres
+    steps:
+      - uses: actions/checkout@v6
+      - uses: erlef/setup-beam@v1
+        with:
+          version-file: .tool-versions
+          version-type: strict
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: .tool-versions
+      - run: sudo apt-get install -y libsodium-dev
+
+      - name: Build app
+        run: |
+          mix deps.get
+          mix compile
+          mix lightning.install_runtime
+      - name: Install JS dependencies
+        run: npm ci
+        working-directory: assets
+      - name: Install browsers
+        run: npx playwright install --with-deps chromium
+        working-directory: assets
+      - name: Set up e2e database
+        run: bin/e2e setup
+      # The suite as the project runs it (`npm run test:e2e`), minus the one spec
+      # that cannot load (imports the missing ../../utils/auth).
+      - name: Run Playwright tests
+        run: >-
+          npx playwright test
+          specs/smoke
+          specs/collaborative/collaborative-editor-credentials
+          specs/collaborative/edge-validation
+          specs/collaborative/job-inspector-configuration
+          specs/collaborative/job-step-sync
+          specs/collaborative/run-retry-keyboard-shortcuts
+        working-directory: assets
+      - uses: actions/upload-artifact@v5
+        if: failure()
+        with:
+          name: playwright-results
+          path: assets/test-results
