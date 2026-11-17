@@ -1,4 +1,4 @@
 %{
   "jason": {:hex, :jason, "1.4.5", "2e3a008590b0b8d7388c20293e9dcc9cf3e5d642fd2a114e4cbbb52e595d940a", [:mix], [{:decimal, "~> 1.0 or ~> 2.0 or ~> 3.0", [hex: :decimal, repo: "hexpm", optional: true]}], "hexpm", "b0c823996102bcd0239b3c2444eb00409b72f6a140c1950bc8b457d836b30684"},
-  "playwright": {:hex, :playwright_ex, "1.65.0-rc.1", "fc1f01a03381139bb9cbd74a0c1c46e3f33295b48c3a5f25a78ebaa912c2c6ab", [:mix], [], "hexpm", "45cae7ddef87cece8940eb2dc7ae47f028b44445eacfba2b45d55ab2b46edbc8"},
+  "playwright": {:git, "https://github.com/ftes/playwright_ex.git", "0217c3445a6845750cdd2a9ce0355588b0147356", [ref: "0217c3445a6845750cdd2a9ce0355588b0147356"]},
 }

@@ -20,7 +20,9 @@ defmodule LightningE2E.MixProject do
 
   defp deps do
     [
-      {:playwright, "~> 1.65.0-rc.1", hex: :playwright_ex},
+      {:playwright,
+       github: "ftes/playwright_ex",
+       ref: "0217c3445a6845750cdd2a9ce0355588b0147356"},
       {:jason, "~> 1.4"}
     ]
   end

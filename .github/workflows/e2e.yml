@@ -51,7 +51,7 @@ jobs:
         working-directory: test/e2e_pw
         run: |
           mix deps.get
-          MIX_ENV=test mix playwright.install -- chromium --with-deps
+          MIX_ENV=test mix playwright.install chromium --with-deps
       - name: Run Playwright tests
         working-directory: test/e2e_pw
         run:
