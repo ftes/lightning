@@ -4,17 +4,11 @@ defmodule LightningE2E.Case do
   (`use: { ...devices['Desktop Chrome'] }`), plus the aliases the specs share.
   """
   use ExUnit.CaseTemplate
-  use Playwright.Test
-
-  alias Playwright.{Browser, BrowserContext}
-  alias Playwright.Test.BrowserPool
 
   using opts do
     quote do
-      use Playwright.Test, unquote(opts)
-      alias Playwright.{Browser, BrowserContext, Expect, Locator, Page}
-      alias Playwright.Test
-      require Playwright.Test
+      use Playwright.Case, unquote(opts)
+      use Playwright.Test, Playwright.device("Desktop Chrome")
 
       alias LightningE2E.Pages.{
         Diagram,
@@ -28,20 +22,5 @@ defmodule LightningE2E.Case do
 
       @moduletag :e2e
     end
-  end
-
-  setup_all do
-    %{browser: BrowserPool.browser()}
-  end
-
-  setup %{browser: browser} do
-    device =
-      Map.fetch!(
-        Playwright.devices(BrowserPool.playwright(browser)),
-        "Desktop Chrome"
-      )
-
-    context = Browser.new_context!(browser, device)
-    %{context: context, page: BrowserContext.new_page!(context)}
   end
 end
