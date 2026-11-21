@@ -3,7 +3,7 @@ defmodule LightningE2E.Pages.Diagram do
   Port of `pages/components/workflow-diagram{,-nodes,-edges}.page.ts`: the React
   Flow canvas, its nodes and edges.
   """
-  import ExUnit.Assertions, only: [assert: 1]
+  import Playwright.Test.Assertions, only: [assert: 1]
   alias Playwright.{Expect, Keyboard, Locator, Mouse, Page}
 
   @react_flow ".react-flow"

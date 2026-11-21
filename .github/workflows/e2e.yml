@@ -54,11 +54,13 @@ jobs:
           MIX_ENV=test mix playwright.install chromium --with-deps
       - name: Run Playwright tests
         working-directory: test/e2e_pw
-        run:
-          mix test --only e2e || { [ $? -eq 2 ] && mix test --only e2e --failed;
-          } || { [ $? -eq 2 ] && mix test --only e2e --failed; }
+        run: |
+          f="--formatter ExUnit.CLIFormatter --formatter Playwright.Test.GitHubFormatter"
+          mix test --only e2e $f ||
+            { [ $? -eq 2 ] && mix test --only e2e --failed $f; } ||
+            { [ $? -eq 2 ] && mix test --only e2e --failed $f; }
       - uses: actions/upload-artifact@v5
-        if: failure()
+        if: ${{ !cancelled() }}
         with:
           name: playwright-results
           path: test/e2e_pw/test-results
